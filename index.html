@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthMap Twin Cities — Healthcare Facilities Web GIS</title>
+  <meta name="description" content="Web GIS map of hospitals, clinics, pharmacies, doctors, dentists and labs in Islamabad and Rawalpindi, fetched live from the OpenStreetMap Overpass API." />
+
+  <!-- Leaflet + MarkerCluster (CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <!-- ===== Sidebar ===== -->
+    <aside class="sidebar">
+      <header class="brand">
+        <div class="logo">+</div>
+        <div>
+          <h1>HealthMap Twin Cities</h1>
+          <p class="subtitle">Healthcare facilities of Islamabad &amp; Rawalpindi</p>
+        </div>
+      </header>
+
+      <details class="about" open>
+        <summary>Study area</summary>
+        <p>
+          The study area covers the twin cities of <strong>Islamabad</strong> (Islamabad Capital Territory)
+          and <strong>Rawalpindi</strong> (Punjab), Pakistan — roughly 33.45°–33.80° N and 72.80°–73.30° E.
+          Together they hold over 5 million people and most of the region's major hospitals.
+          This map retrieves health facilities live from OpenStreetMap so residents and planners can
+          locate the nearest hospital, clinic, pharmacy, doctor, dentist or laboratory.
+        </p>
+      </details>
+
+      <!-- Search -->
+      <label class="field">
+        <span class="field-label">Search by name, area or speciality</span>
+        <input id="search" type="search" placeholder="e.g. PIMS, Shifa, Saddar, G-9…" autocomplete="off" />
+      </label>
+
+      <!-- Category filter -->
+      <div class="field">
+        <span class="field-label">Facility type</span>
+        <div id="categoryFilters" class="chips"></div>
+      </div>
+
+      <!-- Location filter -->
+      <div class="field">
+        <span class="field-label">Location</span>
+        <div class="row">
+          <button class="btn ghost" data-goto="islamabad">Islamabad</button>
+          <button class="btn ghost" data-goto="rawalpindi">Rawalpindi</button>
+          <button class="btn ghost" data-goto="both">Both</button>
+        </div>
+        <label class="check">
+          <input id="inView" type="checkbox" />
+          <span>Only list facilities in current map view</span>
+        </label>
+        <label class="check">
+          <input id="emergencyOnly" type="checkbox" />
+          <span>Only facilities tagged with emergency service</span>
+        </label>
+      </div>
+
+      <div class="results-head">
+        <strong id="resultCount">0 facilities</strong>
+        <button id="resetBtn" class="link">Reset filters</button>
+      </div>
+      <ul id="resultList" class="result-list" aria-live="polite"></ul>
+
+      <footer class="source">
+        <strong>Data source:</strong>
+        <a href="https://wiki.openstreetmap.org/wiki/Overpass_API" target="_blank" rel="noopener">Overpass API</a>
+        querying <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a>
+        (ODbL). Basemap © OpenStreetMap. Data is community-mapped and may be incomplete.
+        <span id="lastUpdated"></span>
+      </footer>
+    </aside>
+
+    <!-- ===== Map ===== -->
+    <main class="map-wrap">
+      <div id="map" role="application" aria-label="Map of healthcare facilities"></div>
+
+      <button id="searchAreaBtn" class="btn primary floating" hidden>Search this area</button>
+
+      <div id="loader" class="overlay" hidden>
+        <div class="spinner"></div>
+        <p id="loaderText">Fetching facilities from Overpass API…</p>
+      </div>
+
+      <div id="errorBox" class="error" hidden>
+        <p id="errorText">Something went wrong.</p>
+        <button id="retryBtn" class="btn primary">Retry</button>
+      </div>
+
+      <div id="legend" class="legend"></div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
